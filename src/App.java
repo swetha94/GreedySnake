@@ -123,7 +123,7 @@ public class App extends Application {
 //                         //Call invalidMoveDirection Method to detect case
 //                         //when the neck is to the left of the head,
 //                         //then the snake cannot move to the left.
-//                         if (invalidMoveDirection() == Direction.LEFT)
+//                     if (invalidMoveDirection() == Direction.LEFT)
 //                            issueWarning("Bite the neck.");
 //                        
 //                         //Call leftBodyNode method to find out whether 
@@ -135,7 +135,11 @@ public class App extends Application {
 
                          //TODO: write a if-statement to find out
                          //when the snake hits the left wall.
-
+			 if(snakeHeadRow < 0){
+			     //snakeHeadRow = 0;
+			     //head.setX(snakeHeadRow * BLOCK_SIZE);
+			     issueWarning("Hit left wall");
+			 }
                          break;
 
                     case RIGHT:
@@ -146,21 +150,24 @@ public class App extends Application {
                          //If none of the above happens, move the snake to the right.
                     	
                     	move(Direction.RIGHT); 
-
+			if(snakeHeadRow == NUM_ROWS)
+			    issueWarning("Hit right wall");
                          break;
 
                     case UP:
                          //TODO: handle the case when the up arrow key is pressed. 
                     	
                     	move(Direction.UP); 
-
+			if(snakeHeadCol < 0)
+			    issueWarning("Hit the top");
                          break;
 
                     case DOWN:
                          //TODO: handle the case when the down arrow key is pressed. 
                     	
                     	move(Direction.DOWN); 
-
+			if(snakeHeadCol == NUM_COLS)
+			    issueWarning("Hit the bottom");
                          break; 
                 }
 
