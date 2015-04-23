@@ -232,7 +232,7 @@ public class App extends Application {
     }
 
     private void eatEgg() {
-        if ( isEggNextToSnakeHead() ) {
+        if ( isEggOnSnake() ) {
         	
 //        	addToTail();
         	// have to add (missing from original code)
@@ -314,8 +314,7 @@ public class App extends Application {
                  //Hint: you may need to use removeTail and addToHead method.
                  //But before you call addToHead method, you need to define some parameter(s)
                  //for the new head.
-            	
-            	
+
             	snakeHeadRow--;
             	addToHead();
             	removeTail();
@@ -442,18 +441,13 @@ public class App extends Application {
     }
 
     //TODO: see whether the egg is to the left, right, up, or down of the snake head.
-    public boolean isEggNextToSnakeHead() {
+    public boolean isEggOnSnake() {
     	
     	if (eggRow == snakeHeadCol && eggCol == snakeHeadRow) {
     		return true;
     	}    	
     	
         return false; //TODO: You need to modify this statement.
-    }
-
-    //TODO: the egg cannot collide with the nodes of the body of the snake.
-    public boolean isEggOnSnake(int eggRow, int eggCol) {
-        return false; //TODO: you need to add more to this method.
     }
 
     private void issueWarning(String message) {
