@@ -123,51 +123,59 @@ public class App extends Application {
 //                         //Call invalidMoveDirection Method to detect case
 //                         //when the neck is to the left of the head,
 //                         //then the snake cannot move to the left.
-//                     if (invalidMoveDirection() == Direction.LEFT)
-//                            issueWarning("Bite the neck.");
+			if (invalidMoveDirection() == Direction.LEFT)
+			  issueWarning("Bite the neck(left).");
 //                        
 //                         //Call leftBodyNode method to find out whether 
 //                         //there is a left node next to the mouth.
-//                         if (leftBodyNode() != null)
-//                            issueWarning("Bite a left node.");
-
-                         move(Direction.LEFT); 
-
-                         //TODO: write a if-statement to find out
-                         //when the snake hits the left wall.
+                         if (leftBodyNode() != null)
+                            issueWarning("Bite a left node.");
 			 if(snakeHeadRow < 0){
 			     //snakeHeadRow = 0;
 			     //head.setX(snakeHeadRow * BLOCK_SIZE);
 			     issueWarning("Hit left wall");
+                         move(Direction.LEFT); 
 			 }
                          break;
 
                     case RIGHT:
                          //TODO: what happens if right arrow key pressed?
                          //The snake may bite its own neck.
-                         //The snake may also bite a body node to its right.
+			if(invalidMoveDirection()==Direction.RIGHT)
+			  issueWarning("Bite the neck(right).");
+                         //The snake may also bite a body node to its right
+			if (rightBodyNode() != null)
+			    issueWarning("Bite a right node");
                          //The snake may also hit the right wall.
+			if(snakeHeadRow == NUM_ROWS)
+			    issueWarning("Hit right wall");
                          //If none of the above happens, move the snake to the right.
                     	
                     	move(Direction.RIGHT); 
-			if(snakeHeadRow == NUM_ROWS)
-			    issueWarning("Hit right wall");
+
                          break;
 
                     case UP:
                          //TODO: handle the case when the up arrow key is pressed. 
-                    	
-                    	move(Direction.UP); 
+                    	if(invalidMoveDirection()==Direction.UP)
+			  issueWarning("Bite the neck(up).");
+                         //The snake may also bite a body node to its right
+			if (upBodyNode() != null)
+			    issueWarning("Bite a upper node");
 			if(snakeHeadCol < 0)
-			    issueWarning("Hit the top");
-                         break;
-
+			    issueWarning("Hit the top");                    
+                    	move(Direction.UP); 
+			break;
                     case DOWN:
                          //TODO: handle the case when the down arrow key is pressed. 
-                    	
-                    	move(Direction.DOWN); 
+                    	if(invalidMoveDirection()==Direction.DOWN)
+			  issueWarning("Bite the neck(down).");
+                         //The snake may also bite a body node to its right
+			if (downBodyNode() != null)
+			    issueWarning("Bite a lower node");                    	
 			if(snakeHeadCol == NUM_COLS)
 			    issueWarning("Hit the bottom");
+                   	move(Direction.DOWN);
                          break; 
                 }
 
@@ -218,24 +226,77 @@ public class App extends Application {
             if (snakeHeadRow == currRow && snakeHeadCol +1 == currCol)
                return node; 
         }
-
         //There is no body node of the snake to the right of the head.
         return null;
     }
 
     //TODO: you finish defining the method.
     public Rectangle leftBodyNode() {
+        Rectangle node;
+        int currRow, currCol;
+        for (int i = 2; i < body.size(); i++) { 
+            //Why do we start i from 2?
+            //The head is indexed at 0, the neck is indexed at 1.
+            //So i = 2 means all the nodes below the neck.
+            node = body.get(i);
+            
+            //node is a rectangle object in javafx, 
+            //its y coordinate is in pixels.
+            //We need to tranlate y coordinate to row number
+            //by dividing y by BLOCK_SIZE.
+            currRow = (int)(node.getY()/BLOCK_SIZE);
+            currCol = (int)(node.getX()/BLOCK_SIZE); 
+            //if the node is right to the head, return it.
+            if (snakeHeadRow == currRow && snakeHeadCol -1 == currCol)
+               return node; 
+    }
         return null;
     }
 
     //TODO: you finish defining the method.
     public Rectangle upBodyNode() {
+        Rectangle node;
+        int currRow, currCol;
+        for (int i = 2; i < body.size(); i++) { 
+            //Why do we start i from 2?
+            //The head is indexed at 0, the neck is indexed at 1.
+            //So i = 2 means all the nodes below the neck.
+            node = body.get(i);
+            
+            //node is a rectangle object in javafx, 
+            //its y coordinate is in pixels.
+            //We need to tranlate y coordinate to row number
+            //by dividing y by BLOCK_SIZE.
+            currRow = (int)(node.getY()/BLOCK_SIZE);
+            currCol = (int)(node.getX()/BLOCK_SIZE); 
+            //if the node is right to the head, return it.
+            if (snakeHeadCol == currCol && snakeHeadRow +1 == currRow)
+               return node; 
+	}
        return null;
     }
 
     //TODO: you finish defining the method.
     public Rectangle downBodyNode() {
-        return null;
+        Rectangle node;
+        int currRow, currCol;
+        for (int i = 2; i < body.size(); i++) { 
+            //Why do we start i from 2?
+            //The head is indexed at 0, the neck is indexed at 1.
+            //So i = 2 means all the nodes below the neck.
+            node = body.get(i);
+            
+            //node is a rectangle object in javafx, 
+            //its y coordinate is in pixels.
+            //We need to tranlate y coordinate to row number
+            //by dividing y by BLOCK_SIZE.
+            currRow = (int)(node.getY()/BLOCK_SIZE);
+            currCol = (int)(node.getX()/BLOCK_SIZE); 
+            //if the node is right to the head, return it.
+            if (snakeHeadCol == currCol && snakeHeadRow -1 == currRow)
+               return node; 
+	}
+       return null;
     }
 
     private void eatEgg() {
@@ -300,19 +361,17 @@ public class App extends Application {
         //If the snake is heading down,
         //then Direction.UP would be invalid for the snake,
         //otherwise, the snake is going to bite its own neck.
-        if (neckNodeCol == snakeHeadCol) {
-           //if the snake is heading down, then it cannot move up or the neck is bitten.
-           if (snakeHeadRow == neckNodeRow +1) 
-              return Direction.UP; 
-           else return Direction.DOWN;
-        }
-        else {
-              if (snakeHeadCol == neckNodeCol +1) //the snake is heading right
-                 return Direction.LEFT; 
-              else return Direction.RIGHT;
-        }
+   if (neckNodeCol == snakeHeadCol && snakeHeadRow == neckNodeRow +1)
+       return Direction.UP;
+   else if(neckNodeCol == snakeHeadCol && snakeHeadRow == neckNodeRow -1)
+       return Direction.DOWN;
+   else if (neckNodeRow == snakeHeadRow && snakeHeadCol == neckNodeCol +1)
+	return Direction.LEFT;
+   else if (neckNodeRow == snakeHeadRow && snakeHeadCol == neckNodeCol +1)
+	return Direction.RIGHT;
+   else
+	return null;
     }
-
     //To move a snake, a simple way is to move the tail and attach that tail to the front of the head.  
     public void move(Direction dir) { 
         switch (dir) { 
