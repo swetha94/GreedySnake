@@ -130,8 +130,8 @@ public class App extends Application {
 //                        
 //                         //Call leftBodyNode method to find out whether 
 //                         //there is a left node next to the mouth.
-//                         if (leftBodyNode() != null)
-//                            issueWarning("Bite a left node.");
+                         if (leftBodyNode() != null)
+                            issueWarning("Bite a left node.");
 
                          //TODO: write a if-statement to find out
                          //when the snake hits the left wall.
@@ -160,19 +160,23 @@ public class App extends Application {
                          //TODO: handle the case when the up arrow key is pressed. 
 			if (invalidMoveDirection() == Direction.UP)
                             issueWarning("Bite the neck(above).");
-                    	
-                    	move(Direction.UP); 
+                         if (upBodyNode() != null)
+                            issueWarning("Bite a upper node.");              
 			if(snakeHeadCol < 0)
-			    issueWarning("Hit the top");
+			    issueWarning("Hit the top");   	
+                    	move(Direction.UP); 
                          break;
 
                     case DOWN:
                          //TODO: handle the case when the down arrow key is pressed. 
                      if (invalidMoveDirection() == Direction.DOWN)
-                            issueWarning("Bite the neck(below).");                 
-                    	move(Direction.DOWN); 
+                            issueWarning("Bite the neck(below).");     
+		     if(downBodyNode() != null)
+			 issueWarning("Bite a lower node");
 			if(snakeHeadCol == NUM_COLS)
-			    issueWarning("Hit the bottom");
+			    issueWarning("Hit the bottom");      
+                    	move(Direction.DOWN); 
+
                          break; 
                 }
 
