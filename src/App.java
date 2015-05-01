@@ -44,10 +44,7 @@ public class App extends Application {
     private int snakeTailCol; //the col where the snake tail is located.
     private int neckNodeRow;
     private int neckNodeCol;
-    private int currRow;
-    private int currCol;
     private Rectangle node;
-
     private Circle egg;
     private int eggRow; //the row of the grid where the egg resides
     private int eggCol; //the col of the grid where the egg resides
@@ -208,20 +205,26 @@ public class App extends Application {
     //that is to the right of the head.
     //If there is no such node, return null.
     public Rectangle rightBodyNode() {
+	Rectangle node;
+	int currRow,currCol;
          for (int i = 2; i < body.size(); i++) { 
             //Why do we start i from 2?
             //The head is indexed at 0, the neck is indexed at 1.
             //So i = 2 means all the nodes below the neck.
             node = body.get(i);
-            
+	    // System.out.println(node.getX());
+	    // System.out.println(node.getY());
             //node is a rectangle object in javafx, 
             //its y coordinate is in pixels.
             //We need to tranlate y coordinate to row number
             //by dividing y by BLOCK_SIZE.
             currRow = (int)(node.getY()/BLOCK_SIZE);
             currCol = (int)(node.getX()/BLOCK_SIZE); 
+	    //	    System.out.println("Body Node: " + i + "HeadRow: " + snakeHeadRow+" CurrRow: " + currRow);
+	    //	    System.out.println("Body Node: " + i + "HeadCol: " + snakeHeadCol+" CurrCol: " + currCol);
+	    System.out.println("");
             //if the node is right to the head, return it.
-            if (snakeHeadRow == currRow && snakeHeadCol +1 == currCol)
+            if (snakeHeadRow == currRow && snakeHeadCol == currCol)
                return node; 
         }
 
@@ -231,16 +234,37 @@ public class App extends Application {
 
     //TODO: you finish defining the method.
     public Rectangle leftBodyNode() {
+            node = body.get(i);
+            currRow = (int)(node.getY()/BLOCK_SIZE);
+            currCol = (int)(node.getX()/BLOCK_SIZE); 
+            //if the node is right to the head, return it.
+            if (snakeHeadRow == currRow && snakeHeadCol == currCol)
+               return node; 
+        }
         return null;
     }
 
     //TODO: you finish defining the method.
     public Rectangle upBodyNode() {
+            node = body.get(i);
+            currRow = (int)(node.getY()/BLOCK_SIZE);
+            currCol = (int)(node.getX()/BLOCK_SIZE); 
+            //if the node is right to the head, return it.
+            if (snakeHeadRow == currRow && snakeHeadCol == currCol)
+               return node; 
+        }
        return null;
     }
 
     //TODO: you finish defining the method.
     public Rectangle downBodyNode() {
+            node = body.get(i);
+            currRow = (int)(node.getY()/BLOCK_SIZE);
+            currCol = (int)(node.getX()/BLOCK_SIZE); 
+            //if the node is right to the head, return it.
+            if (snakeHeadRow == currRow && snakeHeadCol == currCol)
+               return node; 
+        }
         return null;
     }
 
@@ -249,6 +273,8 @@ public class App extends Application {
         	
 //        	addToTail();
         	// have to add (missing from original code)
+	    	//node.setX(head.getX()+1);
+	    //node.setY(head.getY()/BLOCK_SIZE);
         	tail = snake.getTail();
      	   	snakeTailRow = (int)(tail.getX()/BLOCK_SIZE);
      	   	snakeTailCol = (int)(tail.getY()/BLOCK_SIZE);
@@ -257,20 +283,29 @@ public class App extends Application {
         	   //try to add new tail to down direction
                //TODO: attach a new node to the down direction of current tail 
         	   addToTail();
+		   node = body.get(body.size()-1);
+		   node.setY(head.getY() +20);
            }
            else if (snakeTailRow -1 > 0) { 
         	   //try to add new tail from up direction 
                //TODO: attach a new node to the up direction of current tail 
         	   addToTail();
+		   node = body.get(body.size()-1);
+		   node.setY(head.getY() -20); 
            }
            else if (snakeTailCol +1 < NUM_COLS-1) {
         	   //try to add new tail from right position
                //TODO: attach a new node to the right of current tail 
         	   addToTail();
+		   node = body.get(body.size()-1);
+		   node.setY(head.getX() +20);
            }
            else if (snakeTailCol -1 > 0) { //try to add new tail from left position
               //TODO: attach a new node to the left of current tail
+	       //addToTail();
         	   addToTail();
+		   node = body.get(body.size()-1);
+		   node.setY(head.getX() -20);
            } 
            else {
         	   issueWarning("The snake cannot grow without touching a wall. Game over.");
@@ -334,6 +369,9 @@ public class App extends Application {
             	addToHead();
             	removeTail();
             	
+		/*	for (int i=2; i<body.size(); i++)
+			node.setX(node.getX() +1); */
+		    
                 break; 
             case UP: 
                  //TODO: what happens when a snake is moving up? 
@@ -354,10 +392,10 @@ public class App extends Application {
             	
                  break; 
         } 
-        
+        Rectangle node = body.get(body.size()-1);
       // test
-      scoreTextField.setText("(" + snakeHeadRow + ", " + snakeHeadCol + "), " + "(" + currRow + ", " + currCol + ")");
-	//scoreTextField.setText("Eat " + numEggsEaten + " eggs; snake size: " + body.size());
+	//		scoreTextField.setText("(" + snakeHeadRow + ", " + snakeHeadCol + "), " + "(" + node.getX()/BLOCK_SIZE + ", " + node.getY()/BLOCK_SIZE + ")");
+	scoreTextField.setText("Eat " + numEggsEaten + " eggs; snake size: " + body.size());
     }
 
     //TODO: remove the tail.
@@ -397,6 +435,8 @@ public class App extends Application {
     	
     	if (body.size() > 1) {
     		for (int i = 1; i < body.size(); i++) {
+		    // node.getX();
+		    // node.getY();
     			body.get(i).setFill(Color.BLUE);
     		}
     	}
@@ -410,6 +450,7 @@ public class App extends Application {
     private void addToTail() {
     	Rectangle node = new Rectangle(); 
     	body.add(node);
+
     }
 
     public void drawGrid(Canvas canvas) {
@@ -463,6 +504,7 @@ public class App extends Application {
 
     private void issueWarning(String message) {
         //Source: https://docs.oracle.com/javafx/2/api/javafx/stage/Stage.html
+
         TextField warningTextField = new TextField(message);
         warningTextField.setStyle("-fx-font-size: 16px;"
             + "-fx-font-style: italic;"
